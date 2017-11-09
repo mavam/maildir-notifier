@@ -68,10 +68,14 @@ if [ -f $cache ]; then
   mv $tmp $cache
 fi
 
+decode() {
+  python -c "import sys,email.header;print email.header.decode_header(sys.stdin.read())[0][0]"
+}
+
 for maildir in $maildirs; do
   for new in $(find "$maildir/new" -type f); do
-    from=$(formail -X 'From:' < $new | cut -d ':' -f 2- | iconv -f utf-8 -t ascii//translit)
-    subj=$(formail -X 'Subject:' < $new | cut -d ':' -f 2- | iconv -f utf-8 -t ascii//translit)
+    from=$(formail -X 'From:' < $new | cut -d ':' -f 2- | decode)
+    subj=$(formail -X 'Subject:' < $new | cut -d ':' -f 2- | decode)
     id=$(formail -X 'Message-ID:' < $new | shasum | cut -d ' ' -f 1)
     grep -q $id $cache 2> /dev/null
     if [ $? != 0 ] ; then
