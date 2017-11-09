@@ -1,24 +1,4 @@
 #!/bin/sh
-#
-# Checks Maildir directories for new mail. For each new mail, it invokes
-# terminal-notifier to show a notification with the message From and Subject
-# header.
-#
-# The script can execute an arbitrary command when clicking on a notification,
-# e.g., open mutt:
-#
-#   % cat open-mutt
-#   #!/bin/sh
-#   osascript -e 'tell application "Terminal" to do script "mutt"'
-#   % maildir-notifier -e open-mutt MAILBOXES...
-#
-# It comes in handy in conjunction with tools that write new mail in Maildir
-# mailboxes. For example, OfflineIMAP can execute maildir-notifier as post-sync
-# hook. This requires adding the following entry to your .offlineimaprc:
-#
-#   [Account Test]
-#   postsynchook = maildir-notifier ~/.mail/INBOX
-#
 
 age=86400 # purge cache once a day
 cache=~/.maildir-notifier-cache
@@ -27,8 +7,7 @@ delay=0
 cmd=
 timeout=2
 
-usage()
-{
+usage() {
   printf "usage: %s [options] <maildir...>\n" $(basename $0)
   echo ''
   echo 'options:'
